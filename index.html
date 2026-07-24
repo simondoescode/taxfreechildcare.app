@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>UK Tax-Free Childcare Calculator | Estimate Your Government Top-Up</title>
+    <meta name="description" content="Use our free UK Tax-Free Childcare calculator to work out exactly how much you need to pay into your account, and how much the government will contribute.">
+    <link rel="canonical" href="https://simondoescode.github.io/taxfreechildcarecalculator" />
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/taxfreechildcarecalculator/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/taxfreechildcarecalculator/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/taxfreechildcarecalculator/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/taxfreechildcarecalculator/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="UK Tax-Free Childcare Calculator" />
+    <link rel="manifest" href="/taxfreechildcarecalculator/favicon/site.webmanifest" />
+    <style>
+        body { font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
+        
+        /* Hide number input arrows for a cleaner look */
+        input[type="number"]::-webkit-inner-spin-button, 
+        input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type="number"] { -moz-appearance: textfield; }
+
+        /* Premium Load Animations */
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(15px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .animate-fade-in-up {
+            opacity: 0;
+            animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .animate-fade-in {
+            opacity: 0;
+            animation: fadeIn 1.2s ease-out forwards;
+        }
+
+        /* Staggered Delays */
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+        .delay-400 { animation-delay: 400ms; }
+        .delay-500 { animation-delay: 500ms; }
+        .delay-600 { animation-delay: 600ms; }
+        .delay-700 { animation-delay: 700ms; }
+    </style>
+</head>
+<body class="antialiased selection:bg-zinc-700 selection:text-white relative">
+
+    <!-- Premium 70/30 Split Screen Layout -->
+    <div class="min-h-screen flex flex-col lg:flex-row w-full relative z-0">
+
+        <!-- Left Column: Dark Mode Calculator (70%) -->
+        <main class="w-full lg:w-[70%] bg-zinc-950 text-white flex items-center justify-center p-6 sm:p-12 lg:p-20 relative overflow-hidden">
+            
+            <!-- Subtle background glow -->
+            <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none animate-fade-in delay-700">
+                <div class="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] bg-zinc-800 rounded-full blur-[120px] opacity-20"></div>
+            </div>
+
+            <div class="w-full max-w-lg relative z-10">
+                <header class="mb-10 animate-fade-in-up delay-100">
+                    <!-- Premium Logo Placement -->
+                    <div class="mb-6">
+                        <img src="logo.png" alt="Pound Coin Logo" class="w-14 h-14 rounded-full border border-zinc-700/60 shadow-[0_0_20px_rgba(255,255,255,0.03)] bg-zinc-900 object-cover" />
+                    </div>
+                    <h1 class="text-3xl font-semibold tracking-tight text-white mb-2">
+                        Tax-Free Childcare
+                    </h1>
+                    <p class="text-zinc-400 leading-relaxed text-sm font-light">
+                        Calculate your exact deposit to maximize the UK government contribution towards your childcare costs.
+                    </p>
+                </header>
+
+                <!-- Input Form -->
+                <form class="space-y-7" onsubmit="event.preventDefault();">
+                    
+                    <div class="group animate-fade-in-up delay-200">
+                        <label for="total" class="block text-[11px] font-medium uppercase tracking-[0.15em] text-zinc-500 mb-2">
+                            Provider Bill
+                        </label>
+                        <div class="relative transition-all duration-300">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <span class="text-zinc-500 font-light text-lg">£</span>
+                            </div>
+                            <input type="number" id="total" min="0" step="0.01" placeholder="0.00" 
+                                   class="pl-9 w-full bg-zinc-900/50 border border-zinc-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-zinc-500 focus:bg-zinc-900 transition-all text-lg shadow-inner placeholder-zinc-700"
+                                   aria-label="Total amount payable to Childcare Provider">
+                        </div>
+                    </div>
+
+                    <div class="group animate-fade-in-up delay-300">
+                        <div class="flex justify-between items-end mb-3">
+                            <label id="allowanceLabel" for="allowanceInput" class="block text-[11px] font-medium uppercase tracking-[0.15em] text-zinc-500">
+                                Remaining Allowance
+                            </label>
+                        </div>
+
+                        <!-- Segmented Toggle -->
+                        <div class="flex bg-zinc-900 p-1 rounded-xl mb-3 border border-zinc-800/80">
+                            <button type="button" id="btnRemaining" onclick="setMode('remaining')" class="flex-1 text-xs py-2 rounded-lg bg-zinc-800 text-white shadow font-medium transition-all duration-300">Remaining</button>
+                            <button type="button" id="btnUsed" onclick="setMode('used')" class="flex-1 text-xs py-2 rounded-lg text-zinc-400 hover:text-zinc-200 font-medium transition-all duration-300">Amount Used</button>
+                        </div>
+
+                        <div class="relative transition-all duration-300">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <span class="text-zinc-500 font-light text-lg">£</span>
+                            </div>
+                            <input type="number" id="allowanceInput" min="0" step="0.01" placeholder="0.00" 
+                                   class="pl-9 w-full bg-zinc-900/50 border border-zinc-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-zinc-500 focus:bg-zinc-900 transition-all text-lg shadow-inner placeholder-zinc-700"
+                                   aria-label="Government allowance status">
+                        </div>
+                    </div>
+
+                    <!-- Disabled Child Toggle -->
+                    <div id="disabledToggleContainer" class="hidden items-start p-3 bg-zinc-900/30 rounded-xl border border-zinc-800 hover:bg-zinc-900/50 transition-colors cursor-pointer animate-fade-in-up delay-400" onclick="document.getElementById('disabled').click()">
+                        <div class="flex items-center h-5 mt-0.5">
+                            <input id="disabled" type="checkbox" class="h-4 w-4 text-zinc-600 focus:ring-zinc-500 border-zinc-700 bg-zinc-800 rounded cursor-pointer accent-zinc-500">
+                        </div>
+                        <div class="ml-3 text-sm flex-1">
+                            <label for="disabled" class="font-medium text-zinc-300 cursor-pointer pointer-events-none">Child is disabled</label>
+                            <p class="text-zinc-500 mt-0.5 text-[11px] font-light pointer-events-none">Increases max top-up to £1,000 / 3mo.</p>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Output Results -->
+                <section aria-live="polite" class="mt-10 pt-8 border-t border-zinc-800/80 animate-fade-in-up delay-400">
+                    <div class="mb-6 flex justify-between items-start">
+                        <div>
+                            <h2 class="text-[10px] font-medium text-zinc-500 uppercase tracking-[0.2em] mb-2">You need to pay</h2>
+                            <!-- Added smooth color transition to the number -->
+                            <output id="userPays" class="block text-5xl font-light tracking-tight text-white transition-colors duration-300">£0.00</output>
+                        </div>
+                        
+                        <!-- Copy Button -->
+                        <button onclick="copyAmount()" id="copyBtn" class="flex items-center gap-1.5 px-4 py-2 rounded-full bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-zinc-400 hover:text-white transition-all duration-300 focus:outline-none" title="Copy exact amount">
+                            <svg id="copyIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
+                            </svg>
+                            <span id="copyText" class="text-[10px] font-semibold tracking-wider uppercase">Copy</span>
+                        </button>
+                    </div>
+                    
+                    <div>
+                        <h2 class="text-[10px] font-medium text-zinc-500 uppercase tracking-[0.2em] mb-1">Government will add</h2>
+                        <output id="govPays" class="block text-2xl font-medium text-zinc-400">£0.00</output>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Right Column: Light Mode Resources (30%) -->
+        <aside class="w-full lg:w-[30%] bg-white flex items-center justify-center p-6 sm:p-12 lg:p-12 border-l border-zinc-100">
+            <div class="w-full max-w-sm">
+                <h2 class="text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-400 mb-6 flex items-center gap-3 animate-fade-in-up delay-300">
+                    <span class="w-1.5 h-1.5 rounded-full bg-zinc-300"></span>
+                    Official Resources
+                </h2>
+                
+                <div class="space-y-4">
+                    <a href="https://www.gov.uk/tax-free-childcare" target="_blank" rel="noopener noreferrer" class="group block p-4 rounded-2xl border border-zinc-200/60 hover:border-zinc-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-zinc-50/50 hover:bg-white transition-all duration-300 animate-fade-in-up delay-400">
+                        <div class="flex items-center justify-between gap-3">
+                            <div>
+                                <span class="block text-sm font-semibold text-zinc-900 mb-1">Tax-Free Childcare Info</span>
+                                <span class="block text-[12px] text-zinc-500 font-light">Official eligibility & guidance</span>
+                            </div>
+                            <div class="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center shrink-0 group-hover:bg-zinc-900 group-hover:text-white text-zinc-400 transition-colors duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+                                </svg>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="https://www.tax.service.gov.uk/childcare-calc" target="_blank" rel="noopener noreferrer" class="group block p-4 rounded-2xl border border-zinc-200/60 hover:border-zinc-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-zinc-50/50 hover:bg-white transition-all duration-300 animate-fade-in-up delay-500">
+                        <div class="flex items-center justify-between gap-3">
+                            <div>
+                                <span class="block text-sm font-semibold text-zinc-900 mb-1">Check Your Support</span>
+                                <span class="block text-[12px] text-zinc-500 font-light">Gov.uk eligibility calculator</span>
+                            </div>
+                            <div class="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center shrink-0 group-hover:bg-zinc-900 group-hover:text-white text-zinc-400 transition-colors duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+                                </svg>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Subtly Highlighted Distinct CTA Button -->
+                    <a href="https://www.gov.uk/sign-in-childcare-account" target="_blank" rel="noopener noreferrer" class="group block p-4 rounded-2xl border border-zinc-900 shadow-[0_4px_15px_rgb(0,0,0,0.08)] hover:shadow-[0_8px_25px_rgb(0,0,0,0.15)] bg-zinc-900 hover:bg-zinc-800 transition-all duration-300 animate-fade-in-up delay-600 transform hover:-translate-y-0.5">
+                        <div class="flex items-center justify-between gap-3">
+                            <div>
+                                <span class="block text-sm font-semibold text-white mb-1">Sign In To Account</span>
+                                <span class="block text-[12px] text-zinc-400 font-light">Manage childcare account</span>
+                            </div>
+                            <div class="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center shrink-0 group-hover:bg-zinc-700 text-white transition-colors duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+                                </svg>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- Global Floating Toast Notification -->
+    <div id="toastNotification" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 translate-y-16 opacity-0 pointer-events-none transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] z-50 flex items-center gap-3 px-5 py-3 bg-white border border-zinc-200 rounded-full shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)]">
+        <div class="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="white" class="w-3.5 h-3.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+        </div>
+        <span class="text-[13px] font-semibold text-zinc-900 tracking-wide pr-1">Amount copied to clipboard</span>
+    </div>
+
+    <!-- Core Logic Script -->
+    <script>
+        const totalInput = document.getElementById('total');
+        const allowanceInput = document.getElementById('allowanceInput');
+        const disabledToggle = document.getElementById('disabled');
+        const disabledToggleContainer = document.getElementById('disabledToggleContainer');
+        const allowanceLabel = document.getElementById('allowanceLabel');
+        const btnRemaining = document.getElementById('btnRemaining');
+        const btnUsed = document.getElementById('btnUsed');
+        
+        let isRemainingMode = true;
+        let toastTimeout; // Prevents overlapping animations if clicked rapidly
+
+        function copyAmount() {
+            const amountDisplay = document.getElementById('userPays');
+            const amountText = amountDisplay.innerText;
+            const cleanNumber = amountText.replace(/£|,/g, '').trim();
+
+            navigator.clipboard.writeText(cleanNumber).then(() => {
+                const btn = document.getElementById('copyBtn');
+                const icon = document.getElementById('copyIcon');
+                const text = document.getElementById('copyText');
+                const toast = document.getElementById('toastNotification');
+
+                // 1. Button Feedback: Turn solid bright green with shadow
+                btn.classList.add('text-white', 'border-emerald-500', 'bg-emerald-500', 'shadow-[0_0_15px_rgba(16,185,129,0.4)]');
+                btn.classList.remove('text-zinc-400', 'border-zinc-800', 'bg-zinc-900', 'hover:bg-zinc-800', 'hover:text-white');
+                icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />`;
+                text.innerText = "Copied";
+
+                // 2. Amount Text Flash: Temporarily turn the massive £ number green
+                amountDisplay.classList.add('text-emerald-400', 'scale-105', 'transform');
+                amountDisplay.classList.remove('text-white');
+
+                // 3. Show Floating Toast Notification
+                toast.classList.remove('translate-y-16', 'opacity-0');
+                toast.classList.add('translate-y-0', 'opacity-100');
+
+                // Clear existing timeout if user spams the button
+                clearTimeout(toastTimeout);
+                
+                toastTimeout = setTimeout(() => {
+                    // Revert Button
+                    btn.classList.remove('text-white', 'border-emerald-500', 'bg-emerald-500', 'shadow-[0_0_15px_rgba(16,185,129,0.4)]');
+                    btn.classList.add('text-zinc-400', 'border-zinc-800', 'bg-zinc-900', 'hover:bg-zinc-800', 'hover:text-white');
+                    icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />`;
+                    text.innerText = "Copy";
+
+                    // Revert Amount Text
+                    amountDisplay.classList.remove('text-emerald-400', 'scale-105', 'transform');
+                    amountDisplay.classList.add('text-white');
+
+                    // Hide Toast
+                    toast.classList.add('translate-y-16', 'opacity-0');
+                    toast.classList.remove('translate-y-0', 'opacity-100');
+                }, 2500);
+            });
+        }
+
+        function setMode(mode) {
+            isRemainingMode = mode === 'remaining';
+            
+            if (isRemainingMode) {
+                btnRemaining.className = "flex-1 text-xs py-2 rounded-lg bg-zinc-800 text-white shadow font-medium transition-all duration-300";
+                btnUsed.className = "flex-1 text-xs py-2 rounded-lg text-zinc-400 hover:text-zinc-200 font-medium transition-all duration-300";
+                allowanceLabel.innerHTML = 'Remaining Allowance';
+                
+                disabledToggleContainer.classList.add('hidden');
+                disabledToggleContainer.classList.remove('flex');
+            } else {
+                btnUsed.className = "flex-1 text-xs py-2 rounded-lg bg-zinc-800 text-white shadow font-medium transition-all duration-300";
+                btnRemaining.className = "flex-1 text-xs py-2 rounded-lg text-zinc-400 hover:text-zinc-200 font-medium transition-all duration-300";
+                allowanceLabel.innerHTML = 'Gov contribution used';
+                
+                disabledToggleContainer.classList.remove('hidden');
+                disabledToggleContainer.classList.add('flex');
+            }
+            
+            calculate();
+        }
+
+        function calculate() {
+            const total = Math.max(0, parseFloat(totalInput.value) || 0);
+            const allowanceInputValue = Math.max(0, parseFloat(allowanceInput.value) || 0);
+            const isDisabled = disabledToggle.checked;
+            
+            let remainingGovAllowance = 0;
+
+            if (isRemainingMode) {
+                remainingGovAllowance = allowanceInputValue;
+            } else {
+                const maxGovAllowance = isDisabled ? 1000 : 500;
+                remainingGovAllowance = Math.max(0, maxGovAllowance - allowanceInputValue);
+            }
+            
+            let govContribution = total * 0.20;
+            
+            if (govContribution > remainingGovAllowance) {
+                govContribution = remainingGovAllowance;
+            }
+            
+            const userPays = total - govContribution;
+            
+            document.getElementById('userPays').innerText = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(userPays);
+            document.getElementById('govPays').innerText = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(govContribution);
+        }
+
+        function formatToDecimals(event) {
+            const input = event.target;
+            const value = parseFloat(input.value);
+            
+            if (!isNaN(value)) {
+                input.value = value.toFixed(2);
+            }
+            calculate();
+        }
+
+        totalInput.addEventListener('input', calculate);
+        allowanceInput.addEventListener('input', calculate);
+        disabledToggle.addEventListener('change', calculate);
+
+        totalInput.addEventListener('blur', formatToDecimals);
+        allowanceInput.addEventListener('blur', formatToDecimals);
+    </script>
+</body>
+</html>
