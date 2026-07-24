@@ -238,35 +238,35 @@
         <span class="text-[13px] font-semibold text-white tracking-wide pr-1">Amount copied to clipboard</span>
     </div>
 
-    <!-- PWA Chromium Installation Panel (Hidden by default until beforeinstallprompt fires) -->
-    <section id="install-panel" hidden class="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-40 bg-white border border-slate-200 rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] p-4 flex items-center justify-between gap-4 w-11/12 max-w-sm animate-fade-in-up">
-        <div class="flex items-center gap-3">
-            <img src="/favicon/apple-touch-icon.png" alt="App Icon" class="w-10 h-10 rounded-xl bg-slate-50 object-cover border border-slate-200 shadow-sm" onerror="this.src='logo.png'">
-            <div>
-                <h3 class="text-sm font-semibold text-slate-900">Install App</h3>
-                <p class="text-[11px] text-slate-500">Add to your device for quicker access.</p>
+    <!-- PWA Chromium Installation Panel (Mobile-Optimized Alignment) -->
+    <section id="install-panel" hidden class="fixed bottom-6 left-4 right-4 sm:left-1/2 sm:right-auto sm:transform sm:-translate-x-1/2 z-40 bg-white border border-slate-200 rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] p-4 flex items-center justify-between gap-4 w-auto sm:w-11/12 sm:max-w-sm animate-fade-in-up">
+        <div class="flex items-center gap-3 min-w-0">
+            <img src="/favicon/apple-touch-icon.png" alt="App Icon" class="w-10 h-10 rounded-xl bg-slate-50 object-cover border border-slate-200 shadow-sm shrink-0" onerror="this.src='logo.png'">
+            <div class="min-w-0">
+                <h3 class="text-sm font-semibold text-slate-900 truncate">Install App</h3>
+                <p class="text-[11px] text-slate-500 truncate">Add to your device for quicker access.</p>
             </div>
         </div>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 shrink-0">
             <button id="install-button" type="button" class="bg-gradient-to-r from-blue-700 to-blue-800 text-white text-xs font-semibold px-4 py-2 rounded-xl hover:from-blue-800 hover:to-blue-900 transition-all focus:outline-none shadow-sm focus:ring-2 focus:ring-blue-600 focus:ring-offset-1">
                 Install
             </button>
         </div>
     </section>
 
-    <!-- PWA iOS Manual Installation Panel (Shown on iOS Safari when not standalone) -->
-    <section id="ios-install-panel" hidden class="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-40 bg-white border border-slate-200 rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] p-4 flex items-center justify-between gap-4 w-11/12 max-w-sm animate-fade-in-up">
-        <div class="flex items-center gap-3">
-            <img src="/favicon/apple-touch-icon.png" alt="App Icon" class="w-10 h-10 rounded-xl bg-slate-50 object-cover border border-slate-200 shadow-sm" onerror="this.src='logo.png'">
-            <div>
-                <h3 class="text-sm font-semibold text-slate-900">Add to Home Screen</h3>
+    <!-- PWA iOS Manual Installation Panel (Mobile-Optimized Alignment) -->
+    <section id="ios-install-panel" hidden class="fixed bottom-6 left-4 right-4 sm:left-1/2 sm:right-auto sm:transform sm:-translate-x-1/2 z-40 bg-white border border-slate-200 rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] p-4 flex items-center justify-between gap-4 w-auto sm:w-11/12 sm:max-w-sm animate-fade-in-up">
+        <div class="flex items-center gap-3 min-w-0">
+            <img src="/favicon/apple-touch-icon.png" alt="App Icon" class="w-10 h-10 rounded-xl bg-slate-50 object-cover border border-slate-200 shadow-sm shrink-0" onerror="this.src='logo.png'">
+            <div class="min-w-0">
+                <h3 class="text-sm font-semibold text-slate-900 truncate">Add to Home Screen</h3>
                 <p class="text-[11px] text-slate-500">Tap the Share button, then choose “Add to Home Screen”.</p>
             </div>
         </div>
     </section>
 
     <!-- Status Message Notification Element -->
-    <p id="install-message" role="status" hidden class="fixed bottom-24 left-1/2 transform -translate-x-1/2 z-50 bg-slate-900 text-white text-xs px-4 py-2 rounded-lg shadow-lg"></p>
+    <p id="install-message" role="status" hidden class="fixed bottom-24 left-4 right-4 sm:left-1/2 sm:right-auto sm:transform sm:-translate-x-1/2 sm:w-auto sm:max-w-md z-50 bg-slate-900 text-white text-xs px-4 py-2 rounded-lg shadow-lg text-center"></p>
 
     <!-- Core Logic Script -->
     <script>
