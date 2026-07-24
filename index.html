@@ -59,29 +59,36 @@
         .delay-700 { animation-delay: 700ms; }
     </style>
 </head>
-<body class="antialiased selection:bg-zinc-700 selection:text-white relative">
+<!-- Subtle Gov Blue Selection Text -->
+<body class="antialiased selection:bg-blue-100 selection:text-blue-900 relative bg-slate-50">
+
+    <!-- Official Top Accent Bar -->
+    <div class="h-1.5 w-full bg-gradient-to-r from-blue-800 via-blue-600 to-blue-800 absolute top-0 left-0 z-50"></div>
 
     <!-- Premium 70/30 Split Screen Layout -->
     <div class="min-h-screen flex flex-col lg:flex-row w-full relative z-0">
 
-        <!-- Left Column: Dark Mode Calculator (70%) -->
-        <main class="w-full lg:w-[70%] bg-zinc-950 text-white flex items-center justify-center p-6 sm:p-12 lg:p-20 relative overflow-hidden">
+        <!-- Left Column: Light Mode Calculator with Soft Gradient (70%) -->
+        <main class="w-full lg:w-[70%] bg-gradient-to-br from-slate-50 via-white to-blue-50/50 text-slate-900 flex items-center justify-center p-6 sm:p-12 lg:p-20 relative overflow-hidden">
             
             <!-- Subtle background glow -->
             <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none animate-fade-in delay-700">
-                <div class="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] bg-zinc-800 rounded-full blur-[120px] opacity-20"></div>
+                <div class="absolute -top-[10%] -left-[10%] w-[60%] h-[60%] bg-blue-100/60 rounded-full blur-[120px] opacity-60"></div>
+                <div class="absolute bottom-[10%] right-[10%] w-[40%] h-[40%] bg-blue-50 rounded-full blur-[100px] opacity-50"></div>
             </div>
 
-            <div class="w-full max-w-lg relative z-10">
+            <div class="w-full max-w-lg relative z-10 pt-4">
                 <header class="mb-10 animate-fade-in-up delay-100">
                     <!-- Premium Logo Placement -->
-                    <div class="mb-6">
-                        <img src="logo.png" alt="Pound Coin Logo" class="w-14 h-14 rounded-full border border-zinc-700/60 shadow-[0_0_20px_rgba(255,255,255,0.03)] bg-zinc-900 object-cover" />
+                    <div class="mb-6 flex items-center gap-4">
+                        <div class="p-1 rounded-full bg-gradient-to-br from-slate-200 to-slate-100 shadow-sm inline-block">
+                            <img src="logo.png" alt="Pound Coin Logo" class="w-12 h-12 rounded-full border border-white bg-white object-cover" onerror="this.src='/favicon/apple-touch-icon.png'"/>
+                        </div>
                     </div>
-                    <h1 class="text-3xl font-semibold tracking-tight text-white mb-2">
+                    <h1 class="text-3xl font-bold tracking-tight text-slate-900 mb-2">
                         Tax-Free Childcare
                     </h1>
-                    <p class="text-zinc-400 leading-relaxed text-sm font-light">
+                    <p class="text-slate-500 leading-relaxed text-sm font-normal">
                         Calculate your exact deposit to maximize the UK government contribution towards your childcare costs.
                     </p>
                 </header>
@@ -90,65 +97,65 @@
                 <form class="space-y-7" onsubmit="event.preventDefault();">
                     
                     <div class="group animate-fade-in-up delay-200">
-                        <label for="total" class="block text-[11px] font-medium uppercase tracking-[0.15em] text-zinc-500 mb-2">
+                        <label for="total" class="block text-[11px] font-semibold uppercase tracking-[0.15em] text-slate-500 mb-2">
                             Provider Bill
                         </label>
                         <div class="relative transition-all duration-300">
                             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <span class="text-zinc-500 font-light text-lg">£</span>
+                                <span class="text-blue-700/50 font-medium text-lg">£</span>
                             </div>
                             <input type="number" id="total" min="0" step="0.01" placeholder="0.00" 
-                                   class="pl-9 w-full bg-zinc-900/50 border border-zinc-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-zinc-500 focus:bg-zinc-900 transition-all text-lg shadow-inner placeholder-zinc-700"
+                                   class="pl-9 w-full bg-white border border-slate-200 text-slate-900 rounded-xl py-3.5 px-4 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all text-lg shadow-[0_2px_10px_-3px_rgba(0,0,0,0.05)] placeholder-slate-300 font-medium"
                                    aria-label="Total amount payable to Childcare Provider">
                         </div>
                     </div>
 
                     <div class="group animate-fade-in-up delay-300">
                         <div class="flex justify-between items-end mb-3">
-                            <label id="allowanceLabel" for="allowanceInput" class="block text-[11px] font-medium uppercase tracking-[0.15em] text-zinc-500">
+                            <label id="allowanceLabel" for="allowanceInput" class="block text-[11px] font-semibold uppercase tracking-[0.15em] text-slate-500">
                                 Remaining Allowance
                             </label>
                         </div>
 
-                        <!-- Segmented Toggle -->
-                        <div class="flex bg-zinc-900 p-1 rounded-xl mb-3 border border-zinc-800/80">
-                            <button type="button" id="btnRemaining" onclick="setMode('remaining')" class="flex-1 text-xs py-2 rounded-lg bg-zinc-800 text-white shadow font-medium transition-all duration-300">Remaining</button>
-                            <button type="button" id="btnUsed" onclick="setMode('used')" class="flex-1 text-xs py-2 rounded-lg text-zinc-400 hover:text-zinc-200 font-medium transition-all duration-300">Amount Used</button>
+                        <!-- Segmented Toggle with Gradient Active State -->
+                        <div class="flex bg-slate-100/80 p-1 rounded-xl mb-3 border border-slate-200">
+                            <button type="button" id="btnRemaining" onclick="setMode('remaining')" class="flex-1 text-xs py-2 rounded-lg bg-white text-blue-700 shadow-sm border border-slate-200/50 font-semibold transition-all duration-300">Remaining</button>
+                            <button type="button" id="btnUsed" onclick="setMode('used')" class="flex-1 text-xs py-2 rounded-lg text-slate-500 hover:text-slate-700 font-medium transition-all duration-300">Amount Used</button>
                         </div>
 
                         <div class="relative transition-all duration-300">
                             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <span class="text-zinc-500 font-light text-lg">£</span>
+                                <span class="text-blue-700/50 font-medium text-lg">£</span>
                             </div>
                             <input type="number" id="allowanceInput" min="0" step="0.01" placeholder="0.00" 
-                                   class="pl-9 w-full bg-zinc-900/50 border border-zinc-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-zinc-500 focus:bg-zinc-900 transition-all text-lg shadow-inner placeholder-zinc-700"
+                                   class="pl-9 w-full bg-white border border-slate-200 text-slate-900 rounded-xl py-3.5 px-4 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all text-lg shadow-[0_2px_10px_-3px_rgba(0,0,0,0.05)] placeholder-slate-300 font-medium"
                                    aria-label="Government allowance status">
                         </div>
                     </div>
 
                     <!-- Disabled Child Toggle -->
-                    <div id="disabledToggleContainer" class="hidden items-start p-3 bg-zinc-900/30 rounded-xl border border-zinc-800 hover:bg-zinc-900/50 transition-colors cursor-pointer animate-fade-in-up delay-400" onclick="document.getElementById('disabled').click()">
+                    <div id="disabledToggleContainer" class="hidden items-start p-3 bg-white rounded-xl border border-slate-200 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.02)] hover:border-blue-200 transition-colors cursor-pointer animate-fade-in-up delay-400" onclick="document.getElementById('disabled').click()">
                         <div class="flex items-center h-5 mt-0.5">
-                            <input id="disabled" type="checkbox" class="h-4 w-4 text-zinc-600 focus:ring-zinc-500 border-zinc-700 bg-zinc-800 rounded cursor-pointer accent-zinc-500">
+                            <input id="disabled" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-slate-300 bg-white rounded cursor-pointer transition-colors">
                         </div>
                         <div class="ml-3 text-sm flex-1">
-                            <label for="disabled" class="font-medium text-zinc-300 cursor-pointer pointer-events-none">Child is disabled</label>
-                            <p class="text-zinc-500 mt-0.5 text-[11px] font-light pointer-events-none">Increases max top-up to £1,000 / 3mo.</p>
+                            <label for="disabled" class="font-medium text-slate-700 cursor-pointer pointer-events-none">Child is disabled</label>
+                            <p class="text-slate-500 mt-0.5 text-[11px] font-normal pointer-events-none">Increases max top-up to £1,000 / 3mo.</p>
                         </div>
                     </div>
                 </form>
 
                 <!-- Output Results -->
-                <section aria-live="polite" class="mt-10 pt-8 border-t border-zinc-800/80 animate-fade-in-up delay-400">
+                <section aria-live="polite" class="mt-10 pt-8 border-t border-slate-200/80 animate-fade-in-up delay-400">
                     <div class="mb-6 flex justify-between items-start">
                         <div>
-                            <h2 class="text-[10px] font-medium text-zinc-500 uppercase tracking-[0.2em] mb-2">You need to pay</h2>
+                            <h2 class="text-[10px] font-semibold text-slate-500 uppercase tracking-[0.2em] mb-2">You need to pay</h2>
                             <!-- Added smooth color transition to the number -->
-                            <output id="userPays" class="block text-5xl font-light tracking-tight text-white transition-colors duration-300">£0.00</output>
+                            <output id="userPays" class="block text-5xl font-light tracking-tight text-slate-900 transition-colors duration-300">£0.00</output>
                         </div>
                         
                         <!-- Copy Button -->
-                        <button onclick="copyAmount()" id="copyBtn" class="flex items-center gap-1.5 px-4 py-2 rounded-full bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-zinc-400 hover:text-white transition-all duration-300 focus:outline-none" title="Copy exact amount">
+                        <button onclick="copyAmount()" id="copyBtn" class="flex items-center gap-1.5 px-4 py-2 rounded-full bg-white border border-slate-200 shadow-sm hover:bg-slate-50 hover:border-slate-300 text-slate-600 hover:text-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-1" title="Copy exact amount">
                             <svg id="copyIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
                             </svg>
@@ -157,29 +164,29 @@
                     </div>
                     
                     <div>
-                        <h2 class="text-[10px] font-medium text-zinc-500 uppercase tracking-[0.2em] mb-1">Government will add</h2>
-                        <output id="govPays" class="block text-2xl font-medium text-zinc-400">£0.00</output>
+                        <h2 class="text-[10px] font-semibold text-slate-500 uppercase tracking-[0.2em] mb-1">Government will add</h2>
+                        <output id="govPays" class="block text-2xl font-medium text-slate-400">£0.00</output>
                     </div>
                 </section>
             </div>
         </main>
 
-        <!-- Right Column: Light Mode Resources (30%) -->
-        <aside class="w-full lg:w-[30%] bg-white flex items-center justify-center p-6 sm:p-12 lg:p-12 border-l border-zinc-100">
+        <!-- Right Column: Solid White Resources (30%) -->
+        <aside class="w-full lg:w-[30%] bg-white flex items-center justify-center p-6 sm:p-12 lg:p-12 border-l border-slate-100 shadow-[inset_1px_0_10px_rgba(0,0,0,0.02)]">
             <div class="w-full max-w-sm">
-                <h2 class="text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-400 mb-6 flex items-center gap-3 animate-fade-in-up delay-300">
-                    <span class="w-1.5 h-1.5 rounded-full bg-zinc-300"></span>
+                <h2 class="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400 mb-6 flex items-center gap-3 animate-fade-in-up delay-300">
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-600/40"></span>
                     Official Resources
                 </h2>
                 
                 <div class="space-y-4">
-                    <a href="https://www.gov.uk/tax-free-childcare" target="_blank" rel="noopener noreferrer" class="group block p-4 rounded-2xl border border-zinc-200/60 hover:border-zinc-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-zinc-50/50 hover:bg-white transition-all duration-300 animate-fade-in-up delay-400">
+                    <a href="https://www.gov.uk/tax-free-childcare" target="_blank" rel="noopener noreferrer" class="group block p-4 rounded-2xl border border-slate-200/60 hover:border-blue-200 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-slate-50/50 hover:bg-white transition-all duration-300 animate-fade-in-up delay-400">
                         <div class="flex items-center justify-between gap-3">
                             <div>
-                                <span class="block text-sm font-semibold text-zinc-900 mb-1">Tax-Free Childcare Info</span>
-                                <span class="block text-[12px] text-zinc-500 font-light">Official eligibility & guidance</span>
+                                <span class="block text-sm font-semibold text-slate-900 mb-1 group-hover:text-blue-800 transition-colors">Tax-Free Childcare Info</span>
+                                <span class="block text-[12px] text-slate-500 font-normal">Official eligibility & guidance</span>
                             </div>
-                            <div class="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center shrink-0 group-hover:bg-zinc-900 group-hover:text-white text-zinc-400 transition-colors duration-300">
+                            <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0 group-hover:bg-blue-50 group-hover:text-blue-700 text-slate-400 transition-colors duration-300">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
                                 </svg>
@@ -187,13 +194,13 @@
                         </div>
                     </a>
 
-                    <a href="https://www.tax.service.gov.uk/childcare-calc" target="_blank" rel="noopener noreferrer" class="group block p-4 rounded-2xl border border-zinc-200/60 hover:border-zinc-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-zinc-50/50 hover:bg-white transition-all duration-300 animate-fade-in-up delay-500">
+                    <a href="https://www.tax.service.gov.uk/childcare-calc" target="_blank" rel="noopener noreferrer" class="group block p-4 rounded-2xl border border-slate-200/60 hover:border-blue-200 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-slate-50/50 hover:bg-white transition-all duration-300 animate-fade-in-up delay-500">
                         <div class="flex items-center justify-between gap-3">
                             <div>
-                                <span class="block text-sm font-semibold text-zinc-900 mb-1">Check Your Support</span>
-                                <span class="block text-[12px] text-zinc-500 font-light">Gov.uk eligibility calculator</span>
+                                <span class="block text-sm font-semibold text-slate-900 mb-1 group-hover:text-blue-800 transition-colors">Check Your Support</span>
+                                <span class="block text-[12px] text-slate-500 font-normal">Gov.uk eligibility calculator</span>
                             </div>
-                            <div class="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center shrink-0 group-hover:bg-zinc-900 group-hover:text-white text-zinc-400 transition-colors duration-300">
+                            <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0 group-hover:bg-blue-50 group-hover:text-blue-700 text-slate-400 transition-colors duration-300">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
                                 </svg>
@@ -201,14 +208,14 @@
                         </div>
                     </a>
 
-                    <!-- Subtly Highlighted Distinct CTA Button -->
-                    <a href="https://www.gov.uk/sign-in-childcare-account" target="_blank" rel="noopener noreferrer" class="group block p-4 rounded-2xl border border-zinc-900 shadow-[0_4px_15px_rgb(0,0,0,0.08)] hover:shadow-[0_8px_25px_rgb(0,0,0,0.15)] bg-zinc-900 hover:bg-zinc-800 transition-all duration-300 animate-fade-in-up delay-600 transform hover:-translate-y-0.5">
+                    <!-- Prominent Gov Blue Gradient Call to Action -->
+                    <a href="https://www.gov.uk/sign-in-childcare-account" target="_blank" rel="noopener noreferrer" class="group block p-4 rounded-2xl border border-transparent shadow-[0_4px_15px_rgb(29,78,216,0.15)] hover:shadow-[0_8px_25px_rgb(29,78,216,0.25)] bg-gradient-to-r from-blue-700 to-blue-800 hover:from-blue-800 hover:to-blue-900 transition-all duration-300 animate-fade-in-up delay-600 transform hover:-translate-y-0.5">
                         <div class="flex items-center justify-between gap-3">
                             <div>
                                 <span class="block text-sm font-semibold text-white mb-1">Sign In To Account</span>
-                                <span class="block text-[12px] text-zinc-400 font-light">Manage childcare account</span>
+                                <span class="block text-[12px] text-blue-100 font-normal">Manage childcare account</span>
                             </div>
-                            <div class="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center shrink-0 group-hover:bg-zinc-700 text-white transition-colors duration-300">
+                            <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-white/20 text-white transition-colors duration-300">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
                                 </svg>
@@ -222,31 +229,31 @@
     </div>
 
     <!-- Global Floating Toast Notification -->
-    <div id="toastNotification" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 translate-y-16 opacity-0 pointer-events-none transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] z-50 flex items-center gap-3 px-5 py-3 bg-white border border-zinc-200 rounded-full shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)]">
-        <div class="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center shrink-0">
+    <div id="toastNotification" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 translate-y-16 opacity-0 pointer-events-none transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] z-50 flex items-center gap-3 px-5 py-3 bg-slate-900 border border-slate-800 rounded-full shadow-[0_20px_50px_-12px_rgba(0,0,0,0.25)]">
+        <div class="w-6 h-6 rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500 flex items-center justify-center shrink-0 shadow-sm">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="white" class="w-3.5 h-3.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
             </svg>
         </div>
-        <span class="text-[13px] font-semibold text-zinc-900 tracking-wide pr-1">Amount copied to clipboard</span>
+        <span class="text-[13px] font-semibold text-white tracking-wide pr-1">Amount copied to clipboard</span>
     </div>
 
-    <!-- PWA Installation Prompt -->
-    <div id="installPrompt" class="hidden fixed bottom-6 left-1/2 transform -translate-x-1/2 z-40 bg-zinc-900 border border-zinc-700 rounded-2xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] p-4 flex items-center justify-between gap-4 w-11/12 max-w-sm animate-fade-in-up">
+    <!-- PWA Installation Prompt (Gov Blue Styled) -->
+    <div id="installPrompt" class="hidden fixed bottom-6 left-1/2 transform -translate-x-1/2 z-40 bg-white border border-slate-200 rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] p-4 flex items-center justify-between gap-4 w-11/12 max-w-sm animate-fade-in-up">
         <div class="flex items-center gap-3">
-            <img src="/favicon/apple-touch-icon.png" alt="App Icon" class="w-10 h-10 rounded-xl bg-zinc-800 object-cover" onerror="this.src='logo.png'">
+            <img src="/favicon/apple-touch-icon.png" alt="App Icon" class="w-10 h-10 rounded-xl bg-slate-50 object-cover border border-slate-200 shadow-sm" onerror="this.src='logo.png'">
             <div>
-                <h3 class="text-sm font-semibold text-white">Install App</h3>
-                <p class="text-[11px] text-zinc-400">Add to home screen for quick access</p>
+                <h3 class="text-sm font-semibold text-slate-900">Install App</h3>
+                <p class="text-[11px] text-slate-500">Add to home screen for quick access</p>
             </div>
         </div>
         <div class="flex items-center gap-2">
-            <button id="closeInstallBtn" class="p-2 text-zinc-400 hover:text-white transition-colors focus:outline-none" aria-label="Close">
+            <button id="closeInstallBtn" class="p-2 text-slate-400 hover:text-slate-900 transition-colors focus:outline-none" aria-label="Close">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
-            <button id="installBtn" class="bg-white text-zinc-950 text-xs font-semibold px-4 py-2 rounded-xl hover:bg-zinc-200 transition-colors focus:outline-none shadow-sm">
+            <button id="installBtn" class="bg-gradient-to-r from-blue-700 to-blue-800 text-white text-xs font-semibold px-4 py-2 rounded-xl hover:from-blue-800 hover:to-blue-900 transition-all focus:outline-none shadow-sm focus:ring-2 focus:ring-blue-600 focus:ring-offset-1">
                 Install
             </button>
         </div>
@@ -276,15 +283,15 @@
                 const text = document.getElementById('copyText');
                 const toast = document.getElementById('toastNotification');
 
-                // 1. Button Feedback: Turn solid bright green with shadow
-                btn.classList.add('text-white', 'border-emerald-500', 'bg-emerald-500', 'shadow-[0_0_15px_rgba(16,185,129,0.4)]');
-                btn.classList.remove('text-zinc-400', 'border-zinc-800', 'bg-zinc-900', 'hover:bg-zinc-800', 'hover:text-white');
+                // 1. Button Feedback: Turn solid bright green with shadow and gradient
+                btn.classList.add('text-white', 'border-transparent', 'bg-gradient-to-r', 'from-emerald-500', 'to-emerald-600', 'shadow-[0_4px_15px_rgba(16,185,129,0.3)]');
+                btn.classList.remove('text-slate-600', 'border-slate-200', 'bg-white', 'hover:bg-slate-50', 'hover:text-blue-700', 'hover:border-slate-300');
                 icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />`;
                 text.innerText = "Copied";
 
                 // 2. Amount Text Flash: Temporarily turn the massive £ number green
-                amountDisplay.classList.add('text-emerald-400', 'scale-105', 'transform');
-                amountDisplay.classList.remove('text-white');
+                amountDisplay.classList.add('text-emerald-600', 'scale-105', 'transform');
+                amountDisplay.classList.remove('text-slate-900');
 
                 // 3. Show Floating Toast Notification
                 toast.classList.remove('translate-y-16', 'opacity-0');
@@ -295,14 +302,14 @@
                 
                 toastTimeout = setTimeout(() => {
                     // Revert Button
-                    btn.classList.remove('text-white', 'border-emerald-500', 'bg-emerald-500', 'shadow-[0_0_15px_rgba(16,185,129,0.4)]');
-                    btn.classList.add('text-zinc-400', 'border-zinc-800', 'bg-zinc-900', 'hover:bg-zinc-800', 'hover:text-white');
+                    btn.classList.remove('text-white', 'border-transparent', 'bg-gradient-to-r', 'from-emerald-500', 'to-emerald-600', 'shadow-[0_4px_15px_rgba(16,185,129,0.3)]');
+                    btn.classList.add('text-slate-600', 'border-slate-200', 'bg-white', 'hover:bg-slate-50', 'hover:text-blue-700', 'hover:border-slate-300');
                     icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />`;
                     text.innerText = "Copy";
 
                     // Revert Amount Text
-                    amountDisplay.classList.remove('text-emerald-400', 'scale-105', 'transform');
-                    amountDisplay.classList.add('text-white');
+                    amountDisplay.classList.remove('text-emerald-600', 'scale-105', 'transform');
+                    amountDisplay.classList.add('text-slate-900');
 
                     // Hide Toast
                     toast.classList.add('translate-y-16', 'opacity-0');
@@ -315,15 +322,15 @@
             isRemainingMode = mode === 'remaining';
             
             if (isRemainingMode) {
-                btnRemaining.className = "flex-1 text-xs py-2 rounded-lg bg-zinc-800 text-white shadow font-medium transition-all duration-300";
-                btnUsed.className = "flex-1 text-xs py-2 rounded-lg text-zinc-400 hover:text-zinc-200 font-medium transition-all duration-300";
+                btnRemaining.className = "flex-1 text-xs py-2 rounded-lg bg-white text-blue-700 shadow-sm border border-slate-200/50 font-semibold transition-all duration-300";
+                btnUsed.className = "flex-1 text-xs py-2 rounded-lg text-slate-500 hover:text-slate-700 font-medium transition-all duration-300 border border-transparent";
                 allowanceLabel.innerHTML = 'Remaining Allowance';
                 
                 disabledToggleContainer.classList.add('hidden');
                 disabledToggleContainer.classList.remove('flex');
             } else {
-                btnUsed.className = "flex-1 text-xs py-2 rounded-lg bg-zinc-800 text-white shadow font-medium transition-all duration-300";
-                btnRemaining.className = "flex-1 text-xs py-2 rounded-lg text-zinc-400 hover:text-zinc-200 font-medium transition-all duration-300";
+                btnUsed.className = "flex-1 text-xs py-2 rounded-lg bg-white text-blue-700 shadow-sm border border-slate-200/50 font-semibold transition-all duration-300";
+                btnRemaining.className = "flex-1 text-xs py-2 rounded-lg text-slate-500 hover:text-slate-700 font-medium transition-all duration-300 border border-transparent";
                 allowanceLabel.innerHTML = 'Gov contribution used';
                 
                 disabledToggleContainer.classList.remove('hidden');
