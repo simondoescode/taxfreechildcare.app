@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Updated asset paths for root domain -->
-    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/png" href="/favicon/web-app-manifest-192x192.png" sizes="192x192" />
     <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
     <link rel="shortcut icon" href="/favicon/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
@@ -238,26 +238,35 @@
         <span class="text-[13px] font-semibold text-white tracking-wide pr-1">Amount copied to clipboard</span>
     </div>
 
-    <!-- PWA Installation Prompt (Gov Blue Styled) -->
-    <div id="installPrompt" class="hidden fixed bottom-6 left-1/2 transform -translate-x-1/2 z-40 bg-white border border-slate-200 rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] p-4 flex items-center justify-between gap-4 w-11/12 max-w-sm animate-fade-in-up">
+    <!-- PWA Chromium Installation Panel (Hidden by default until beforeinstallprompt fires) -->
+    <section id="install-panel" hidden class="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-40 bg-white border border-slate-200 rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] p-4 flex items-center justify-between gap-4 w-11/12 max-w-sm animate-fade-in-up">
         <div class="flex items-center gap-3">
             <img src="/favicon/apple-touch-icon.png" alt="App Icon" class="w-10 h-10 rounded-xl bg-slate-50 object-cover border border-slate-200 shadow-sm" onerror="this.src='logo.png'">
             <div>
                 <h3 class="text-sm font-semibold text-slate-900">Install App</h3>
-                <p class="text-[11px] text-slate-500">Add to home screen for quick access</p>
+                <p class="text-[11px] text-slate-500">Add to your device for quicker access.</p>
             </div>
         </div>
         <div class="flex items-center gap-2">
-            <button id="closeInstallBtn" class="p-2 text-slate-400 hover:text-slate-900 transition-colors focus:outline-none" aria-label="Close">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-            <button id="installBtn" class="bg-gradient-to-r from-blue-700 to-blue-800 text-white text-xs font-semibold px-4 py-2 rounded-xl hover:from-blue-800 hover:to-blue-900 transition-all focus:outline-none shadow-sm focus:ring-2 focus:ring-blue-600 focus:ring-offset-1">
+            <button id="install-button" type="button" class="bg-gradient-to-r from-blue-700 to-blue-800 text-white text-xs font-semibold px-4 py-2 rounded-xl hover:from-blue-800 hover:to-blue-900 transition-all focus:outline-none shadow-sm focus:ring-2 focus:ring-blue-600 focus:ring-offset-1">
                 Install
             </button>
         </div>
-    </div>
+    </section>
+
+    <!-- PWA iOS Manual Installation Panel (Shown on iOS Safari when not standalone) -->
+    <section id="ios-install-panel" hidden class="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-40 bg-white border border-slate-200 rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] p-4 flex items-center justify-between gap-4 w-11/12 max-w-sm animate-fade-in-up">
+        <div class="flex items-center gap-3">
+            <img src="/favicon/apple-touch-icon.png" alt="App Icon" class="w-10 h-10 rounded-xl bg-slate-50 object-cover border border-slate-200 shadow-sm" onerror="this.src='logo.png'">
+            <div>
+                <h3 class="text-sm font-semibold text-slate-900">Add to Home Screen</h3>
+                <p class="text-[11px] text-slate-500">Tap the Share button, then choose “Add to Home Screen”.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Status Message Notification Element -->
+    <p id="install-message" role="status" hidden class="fixed bottom-24 left-1/2 transform -translate-x-1/2 z-50 bg-slate-900 text-white text-xs px-4 py-2 rounded-lg shadow-lg"></p>
 
     <!-- Core Logic Script -->
     <script>
@@ -292,14 +301,11 @@
                     if (state.total !== undefined) totalInput.value = state.total;
                     if (state.allowance !== undefined) allowanceInput.value = state.allowance;
                     if (state.isDisabled !== undefined) disabledToggle.checked = state.isDisabled;
-                    
-                    // Set mode visually and internally without triggering duplicate saves
                     if (state.mode) setMode(state.mode);
                 } catch (e) {
                     console.error("Could not load saved data", e);
                 }
             } else {
-                // If no saved state, run initial calculation to set default zeros
                 calculate();
             }
         }
@@ -391,7 +397,6 @@
             document.getElementById('userPays').innerText = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(userPays);
             document.getElementById('govPays').innerText = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(govContribution);
             
-            // Save state on every calculation
             saveState();
         }
 
@@ -405,7 +410,6 @@
             calculate();
         }
 
-        // --- Event Listeners ---
         totalInput.addEventListener('input', calculate);
         allowanceInput.addEventListener('input', calculate);
         disabledToggle.addEventListener('change', calculate);
@@ -413,34 +417,72 @@
         totalInput.addEventListener('blur', formatToDecimals);
         allowanceInput.addEventListener('blur', formatToDecimals);
         
-        // --- Initialization ---
-        // Load the saved state as soon as the script runs
         loadState();
 
-        // --- PWA Installation Logic ---
-        let deferredPrompt;
-        const installPrompt = document.getElementById('installPrompt');
-        const installBtn = document.getElementById('installBtn');
-        const closeInstallBtn = document.getElementById('closeInstallBtn');
+        // --- Robust PWA Installation Logic ---
+        let deferredInstallPrompt = null;
+        const installPanel = document.querySelector("#install-panel");
+        const iosInstallPanel = document.querySelector("#ios-install-panel");
+        const installButton = document.querySelector("#install-button");
+        const installMessage = document.querySelector("#install-message");
 
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            installPrompt.classList.remove('hidden');
+        const isStandalone =
+          window.matchMedia("(display-mode: standalone)").matches ||
+          window.navigator.standalone === true;
+
+        const isIOS =
+          /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+          (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
+        function showMessage(message) {
+            installMessage.textContent = message;
+            installMessage.hidden = false;
+            setTimeout(() => {
+                installMessage.hidden = true;
+            }, 4000);
+        }
+
+        if (!isStandalone && isIOS) {
+            iosInstallPanel.hidden = false;
+        }
+
+        window.addEventListener("beforeinstallprompt", event => {
+            event.preventDefault();
+            deferredInstallPrompt = event;
+            installPanel.hidden = false;
         });
 
-        installBtn.addEventListener('click', async () => {
-            installPrompt.classList.add('hidden');
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                console.log(`User response to the install prompt: ${outcome}`);
-                deferredPrompt = null;
+        installButton.addEventListener("click", async () => {
+            if (!deferredInstallPrompt) {
+                showMessage(
+                    "Installation is not currently available. Use your browser menu and select Install app or Add to Home Screen."
+                );
+                return;
+            }
+
+            installButton.disabled = true;
+
+            try {
+                await deferredInstallPrompt.prompt();
+                const { outcome } = await deferredInstallPrompt.userChoice;
+
+                if (outcome === "accepted") {
+                    installPanel.hidden = true;
+                }
+            } catch (error) {
+                console.error("PWA installation failed:", error);
+                showMessage("The installation prompt could not be opened.");
+            } finally {
+                deferredInstallPrompt = null;
+                installButton.disabled = false;
             }
         });
 
-        closeInstallBtn.addEventListener('click', () => {
-            installPrompt.classList.add('hidden');
+        window.addEventListener("appinstalled", () => {
+            deferredInstallPrompt = null;
+            installPanel.hidden = true;
+            iosInstallPanel.hidden = true;
+            showMessage("The app has been installed.");
         });
 
         if ('serviceWorker' in navigator) {
