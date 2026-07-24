@@ -269,9 +269,42 @@
         const btnRemaining = document.getElementById('btnRemaining');
         const btnUsed = document.getElementById('btnUsed');
         
+        const STORAGE_KEY = 'taxFreeChildcareState';
         let isRemainingMode = true;
-        let toastTimeout; // Prevents overlapping animations if clicked rapidly
+        let toastTimeout; 
 
+        // --- Persistence Logic ---
+        function saveState() {
+            const state = {
+                total: totalInput.value,
+                allowance: allowanceInput.value,
+                isDisabled: disabledToggle.checked,
+                mode: isRemainingMode ? 'remaining' : 'used'
+            };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        }
+
+        function loadState() {
+            const savedState = localStorage.getItem(STORAGE_KEY);
+            if (savedState) {
+                try {
+                    const state = JSON.parse(savedState);
+                    if (state.total !== undefined) totalInput.value = state.total;
+                    if (state.allowance !== undefined) allowanceInput.value = state.allowance;
+                    if (state.isDisabled !== undefined) disabledToggle.checked = state.isDisabled;
+                    
+                    // Set mode visually and internally without triggering duplicate saves
+                    if (state.mode) setMode(state.mode);
+                } catch (e) {
+                    console.error("Could not load saved data", e);
+                }
+            } else {
+                // If no saved state, run initial calculation to set default zeros
+                calculate();
+            }
+        }
+
+        // --- Core Calculator Logic ---
         function copyAmount() {
             const amountDisplay = document.getElementById('userPays');
             const amountText = amountDisplay.innerText;
@@ -283,35 +316,28 @@
                 const text = document.getElementById('copyText');
                 const toast = document.getElementById('toastNotification');
 
-                // 1. Button Feedback: Turn solid bright green with shadow and gradient
                 btn.classList.add('text-white', 'border-transparent', 'bg-gradient-to-r', 'from-emerald-500', 'to-emerald-600', 'shadow-[0_4px_15px_rgba(16,185,129,0.3)]');
                 btn.classList.remove('text-slate-600', 'border-slate-200', 'bg-white', 'hover:bg-slate-50', 'hover:text-blue-700', 'hover:border-slate-300');
                 icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />`;
                 text.innerText = "Copied";
 
-                // 2. Amount Text Flash: Temporarily turn the massive £ number green
                 amountDisplay.classList.add('text-emerald-600', 'scale-105', 'transform');
                 amountDisplay.classList.remove('text-slate-900');
 
-                // 3. Show Floating Toast Notification
                 toast.classList.remove('translate-y-16', 'opacity-0');
                 toast.classList.add('translate-y-0', 'opacity-100');
 
-                // Clear existing timeout if user spams the button
                 clearTimeout(toastTimeout);
                 
                 toastTimeout = setTimeout(() => {
-                    // Revert Button
                     btn.classList.remove('text-white', 'border-transparent', 'bg-gradient-to-r', 'from-emerald-500', 'to-emerald-600', 'shadow-[0_4px_15px_rgba(16,185,129,0.3)]');
                     btn.classList.add('text-slate-600', 'border-slate-200', 'bg-white', 'hover:bg-slate-50', 'hover:text-blue-700', 'hover:border-slate-300');
                     icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />`;
                     text.innerText = "Copy";
 
-                    // Revert Amount Text
                     amountDisplay.classList.remove('text-emerald-600', 'scale-105', 'transform');
                     amountDisplay.classList.add('text-slate-900');
 
-                    // Hide Toast
                     toast.classList.add('translate-y-16', 'opacity-0');
                     toast.classList.remove('translate-y-0', 'opacity-100');
                 }, 2500);
@@ -364,6 +390,9 @@
             
             document.getElementById('userPays').innerText = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(userPays);
             document.getElementById('govPays').innerText = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(govContribution);
+            
+            // Save state on every calculation
+            saveState();
         }
 
         function formatToDecimals(event) {
@@ -376,6 +405,7 @@
             calculate();
         }
 
+        // --- Event Listeners ---
         totalInput.addEventListener('input', calculate);
         allowanceInput.addEventListener('input', calculate);
         disabledToggle.addEventListener('change', calculate);
@@ -383,43 +413,36 @@
         totalInput.addEventListener('blur', formatToDecimals);
         allowanceInput.addEventListener('blur', formatToDecimals);
         
+        // --- Initialization ---
+        // Load the saved state as soon as the script runs
+        loadState();
+
         // --- PWA Installation Logic ---
         let deferredPrompt;
         const installPrompt = document.getElementById('installPrompt');
         const installBtn = document.getElementById('installBtn');
         const closeInstallBtn = document.getElementById('closeInstallBtn');
 
-        // Listen for the beforeinstallprompt event
         window.addEventListener('beforeinstallprompt', (e) => {
-            // Prevent the mini-infobar from appearing on mobile
             e.preventDefault();
-            // Stash the event so it can be triggered later
             deferredPrompt = e;
-            // Update UI to notify the user they can install the PWA
             installPrompt.classList.remove('hidden');
         });
 
-        // Handle install button click
         installBtn.addEventListener('click', async () => {
             installPrompt.classList.add('hidden');
             if (deferredPrompt) {
-                // Show the install prompt
                 deferredPrompt.prompt();
-                // Wait for the user to respond
                 const { outcome } = await deferredPrompt.userChoice;
                 console.log(`User response to the install prompt: ${outcome}`);
-                // We've used the prompt, and can't use it again, clear it
                 deferredPrompt = null;
             }
         });
 
-        // Handle close button click
         closeInstallBtn.addEventListener('click', () => {
             installPrompt.classList.add('hidden');
         });
 
-        // Optional: Register a basic Service Worker if you have an sw.js file
-        // This is highly recommended to ensure the PWA install prompt triggers correctly on all devices.
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js').catch((error) => {
