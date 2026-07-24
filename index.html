@@ -7,16 +7,19 @@
     <!-- SEO Meta Tags -->
     <title>UK Tax-Free Childcare Calculator | Estimate Your Government Top-Up</title>
     <meta name="description" content="Use our free UK Tax-Free Childcare calculator to work out exactly how much you need to pay into your account, and how much the government will contribute.">
-    <link rel="canonical" href="https://simondoescode.github.io/taxfreechildcarecalculator" />
+    <link rel="canonical" href="https://taxfreechildcare.app" />
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="/taxfreechildcarecalculator/favicon/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/taxfreechildcarecalculator/favicon/favicon.svg" />
-    <link rel="shortcut icon" href="/taxfreechildcarecalculator/favicon/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/taxfreechildcarecalculator/favicon/apple-touch-icon.png" />
+    
+    <!-- Updated asset paths for root domain -->
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="UK Tax-Free Childcare Calculator" />
-    <link rel="manifest" href="/taxfreechildcarecalculator/favicon/site.webmanifest" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
+    
     <style>
         body { font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
         
@@ -228,6 +231,27 @@
         <span class="text-[13px] font-semibold text-zinc-900 tracking-wide pr-1">Amount copied to clipboard</span>
     </div>
 
+    <!-- PWA Installation Prompt -->
+    <div id="installPrompt" class="hidden fixed bottom-6 left-1/2 transform -translate-x-1/2 z-40 bg-zinc-900 border border-zinc-700 rounded-2xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] p-4 flex items-center justify-between gap-4 w-11/12 max-w-sm animate-fade-in-up">
+        <div class="flex items-center gap-3">
+            <img src="/favicon/apple-touch-icon.png" alt="App Icon" class="w-10 h-10 rounded-xl bg-zinc-800 object-cover" onerror="this.src='logo.png'">
+            <div>
+                <h3 class="text-sm font-semibold text-white">Install App</h3>
+                <p class="text-[11px] text-zinc-400">Add to home screen for quick access</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <button id="closeInstallBtn" class="p-2 text-zinc-400 hover:text-white transition-colors focus:outline-none" aria-label="Close">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <button id="installBtn" class="bg-white text-zinc-950 text-xs font-semibold px-4 py-2 rounded-xl hover:bg-zinc-200 transition-colors focus:outline-none shadow-sm">
+                Install
+            </button>
+        </div>
+    </div>
+
     <!-- Core Logic Script -->
     <script>
         const totalInput = document.getElementById('total');
@@ -351,6 +375,51 @@
 
         totalInput.addEventListener('blur', formatToDecimals);
         allowanceInput.addEventListener('blur', formatToDecimals);
+        
+        // --- PWA Installation Logic ---
+        let deferredPrompt;
+        const installPrompt = document.getElementById('installPrompt');
+        const installBtn = document.getElementById('installBtn');
+        const closeInstallBtn = document.getElementById('closeInstallBtn');
+
+        // Listen for the beforeinstallprompt event
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent the mini-infobar from appearing on mobile
+            e.preventDefault();
+            // Stash the event so it can be triggered later
+            deferredPrompt = e;
+            // Update UI to notify the user they can install the PWA
+            installPrompt.classList.remove('hidden');
+        });
+
+        // Handle install button click
+        installBtn.addEventListener('click', async () => {
+            installPrompt.classList.add('hidden');
+            if (deferredPrompt) {
+                // Show the install prompt
+                deferredPrompt.prompt();
+                // Wait for the user to respond
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response to the install prompt: ${outcome}`);
+                // We've used the prompt, and can't use it again, clear it
+                deferredPrompt = null;
+            }
+        });
+
+        // Handle close button click
+        closeInstallBtn.addEventListener('click', () => {
+            installPrompt.classList.add('hidden');
+        });
+
+        // Optional: Register a basic Service Worker if you have an sw.js file
+        // This is highly recommended to ensure the PWA install prompt triggers correctly on all devices.
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch((error) => {
+                    console.log('ServiceWorker registration failed: ', error);
+                });
+            });
+        }
     </script>
 </body>
 </html>
