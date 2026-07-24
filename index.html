@@ -432,9 +432,8 @@
           window.matchMedia("(display-mode: standalone)").matches ||
           window.navigator.standalone === true;
 
-        const isIOS =
-          /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-          (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+        // Accurate check targeting actual mobile iOS Safari/WebKit while excluding desktop Chrome/Mac
+        const isIOS = /iP(ad|hone|od)/.test(navigator.userAgent) && !window.MSStream;
 
         function showMessage(message) {
             installMessage.textContent = message;
